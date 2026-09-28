@@ -11,7 +11,7 @@
 const TRANSLATIONS = {
   en: {
     langName: "English",
-    slogan: "Voice of the Nation • All Voices Matter",
+    slogan: "All voices matter",
     publishBtn: "Publish Story",
     signInBtn: "Sign In",
     subscribeBtn: "Subscribe Now",
@@ -52,12 +52,12 @@ const TRANSLATIONS = {
     // Badges & Section Headers
     badges: {
       hotNow: "HOT NOW",
-      trendingHeader: "TRENDING IN NIGERIA",
-      breakingHeader: "BREAKING DISPATCHES",
-      nationalSpotlight: "National Spotlight",
-      popularHeader: "Popular Across Nigeria",
-      editorPickHeader: "Editor's Pick",
-      specialFeaturesHeader: "Special Features",
+      trendingHeader: "TRENDING NOW",
+      breakingHeader: "BREAKING NEWS",
+      nationalSpotlight: "Breaking News",
+      popularHeader: "Popular Now",
+      editorPickHeader: "Editor Choice",
+      specialFeaturesHeader: "Worth Reading",
       appTitle: "Download Nigerian Updates App",
       appSubtitle: "Stay informed wherever you are. Get instant breaking news alerts, offline reading mode, and live investigative podcast broadcasts on iOS and Android.",
       downloadIos: "Download on the App Store",
