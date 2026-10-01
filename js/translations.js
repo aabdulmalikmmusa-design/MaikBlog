@@ -14,7 +14,7 @@ const TRANSLATIONS = {
     slogan: "All voices matter",
     publishBtn: "Publish Story",
     signInBtn: "Sign In",
-    subscribeBtn: "Subscribe Now",
+    subscribeBtn: "Subscribe Free",
     openBookmarksBtn: "Saved Bookmarks",
     searchPlaceholder: "Search Nigerian Updates...",
     
@@ -29,6 +29,7 @@ const TRANSLATIONS = {
       travel: "TRAVEL",
       science: "SCIENCE",
       world: "WORLD",
+      subscription: "FREE ACCESS",
       contact: "CONTACT"
     },
 
@@ -45,7 +46,7 @@ const TRANSLATIONS = {
       world: "World & ECOWAS",
       savedStories: "Saved Stories",
       account: "Account",
-      subscribePill: "Subscribe • ₦2,500 / month",
+      subscribePill: "Subscribe • 100% Free",
       publishDesk: "Publish Story (Admin Desk)"
     },
 
@@ -64,7 +65,7 @@ const TRANSLATIONS = {
       downloadAndroid: "Get it on Google Play",
       briefingTitle: "Morning Briefing",
       briefingSubtitle: "Get the morning Nigerian intelligence briefing, Naira rates, and top political analyses directly delivered to your email.",
-      subscribeButton: "Subscribe",
+      subscribeButton: "Subscribe Free",
       footerAboutTitle: "Nigerian Updates",
       footerAboutSlogan: "Voice of the Nation • Est. 2026",
       footerAboutText: "Nigeria's foremost independent digital newsroom, committed to verifiable journalism, civic empowerment, investigative depth, and nation-building across all 36 states and the Federal Capital Territory.",
@@ -147,7 +148,7 @@ const TRANSLATIONS = {
     slogan: "Voice of the Nation • Every Body Voice Matter",
     publishBtn: "Post Tori",
     signInBtn: "Sign In",
-    subscribeBtn: "Subscribe Sharp-Sharp",
+    subscribeBtn: "Subscribe Free",
     openBookmarksBtn: "Saved Stories",
     searchPlaceholder: "Search Nigerian news, politics, market gist...",
 
@@ -162,6 +163,7 @@ const TRANSLATIONS = {
       travel: "TRAVEL",
       science: "SCIENCE",
       world: "WORLD",
+      subscription: "FREE ACCESS",
       contact: "CONTACT"
     },
 
@@ -178,7 +180,7 @@ const TRANSLATIONS = {
       world: "World & ECOWAS",
       savedStories: "Saved Stories",
       account: "My Account",
-      subscribePill: "Subscribe • ₦2,500 / month",
+      subscribePill: "Subscribe • 100% Free",
       publishDesk: "Publish Story (Admin Desk)"
     },
 
@@ -197,7 +199,7 @@ const TRANSLATIONS = {
       downloadAndroid: "Get am for Google Play",
       briefingTitle: "Morning Tori Briefing",
       briefingSubtitle: "Collect morning Naija intelligence report, Naira rate, and heavy politics analysis straight to your email.",
-      subscribeButton: "Subscribe",
+      subscribeButton: "Subscribe Free",
       footerAboutTitle: "Nigerian Updates",
       footerAboutSlogan: "Voice of the Nation • Est. 2026",
       footerAboutText: "Naija number one independent newsroom, we dey bring original verified tori, civic ginger, investigative journalism, and nation-building across all 36 states plus Abuja.",
@@ -280,7 +282,7 @@ const TRANSLATIONS = {
     slogan: "Muryar Al'umma • Dukkan Muryoyi Suna da Daraja",
     publishBtn: "Buga Labari",
     signInBtn: "Shiga Ciki",
-    subscribeBtn: "Yi Rajista Yanzu",
+    subscribeBtn: "Yi Rajista (Kyauta)",
     openBookmarksBtn: "Labaran da aka Ajiye",
     searchPlaceholder: "Nemi labaran Najeriya, siyasa, kasuwanci...",
 
@@ -295,6 +297,7 @@ const TRANSLATIONS = {
       travel: "ZANGA-ZANGA",
       science: "KIMIYYA",
       world: "DUNIYA",
+      subscription: "KYAUTA",
       contact: "TUNTUBE MU"
     },
 
@@ -311,7 +314,7 @@ const TRANSLATIONS = {
       world: "Labaran Duniya da ECOWAS",
       savedStories: "Labaran da aka Ajiye",
       account: "Asusu Na",
-      subscribePill: "Yi Rajista • ₦2,500 / wata",
+      subscribePill: "Yi Rajista • 100% Kyauta",
       publishDesk: "Buga Labari (Admin)"
     },
 
@@ -330,7 +333,7 @@ const TRANSLATIONS = {
       downloadAndroid: "Samu a Google Play",
       briefingTitle: "Takaitaccen Labarin Safe",
       briefingSubtitle: "Samun takaitaccen labaran safe na Najeriya, farashin Naira, da fashin bakin siyasa kai tsaye a akwatin sakonka na email.",
-      subscribeButton: "Yi Rajista",
+      subscribeButton: "Yi Rajista Kyauta",
       footerAboutTitle: "Nigerian Updates",
       footerAboutSlogan: "Muryar Al'umma • Est. 2026",
       footerAboutText: "Babban dakin labarai mai zaman kansa a Najeriya, wanda ya himmatu wajen bayar da ingantattun labarai, binciken kwakwaf, da gina kasa a jihohi 36 da babban birnin tarayya Abuja.",
@@ -413,7 +416,7 @@ const TRANSLATIONS = {
     slogan: "Ohùn Orílẹ̀-Èdè • Gbogbo Ohùn Ni Pàtàkì",
     publishBtn: "Tẹ Ìròyìn",
     signInBtn: "Wọlé",
-    subscribeBtn: "Ṣe Àbásọ̀rọ̀ Nísinsìnyí",
+    subscribeBtn: "Ṣe Àbásọ̀rọ̀ (Ọ̀fẹ́)",
     openBookmarksBtn: "Àwọn Ìròyìn Tí A Fipamọ́",
     searchPlaceholder: "Wá ìròyìn Nàìjíríà, òṣèlú, iṣẹ́ ajé...",
 
@@ -428,6 +431,7 @@ const TRANSLATIONS = {
       travel: "ÌRÌN-ÀJÒ",
       science: "SAYẸ́ǸSÌ",
       world: "ÀGBÁYÉ",
+      subscription: "Ọ̀FẸ́",
       contact: "KÀN SÍ WA"
     },
 
@@ -444,7 +448,7 @@ const TRANSLATIONS = {
       world: "Àgbáyé àti ECOWAS",
       savedStories: "Àwọn Ìròyìn Tí A Fipamọ́",
       account: "Àkọọ́lẹ̀ Mi",
-      subscribePill: "Ṣe Àbásọ̀rọ̀ • ₦2,500 / oṣù",
+      subscribePill: "Ṣe Àbásọ̀rọ̀ • 100% Ọ̀fẹ́",
       publishDesk: "Tẹ Ìròyìn (Olóòtú)"
     },
 
@@ -463,7 +467,7 @@ const TRANSLATIONS = {
       downloadAndroid: "Gba lórí Google Play",
       briefingTitle: "Àkópọ̀ Ìròyìn Àárọ̀",
       briefingSubtitle: "Gba àkópọ̀ ìròyìn àárọ̀ Nàìjíríà, iye owó Náírà, àti àtúnyẹ̀wò òṣèlú tààrà sí inú ímeèlì rẹ.",
-      subscribeButton: "Ṣe Àbásọ̀rọ̀",
+      subscribeButton: "Ṣe Àbásọ̀rọ̀ Ọ̀fẹ́",
       footerAboutTitle: "Nigerian Updates",
       footerAboutSlogan: "Ohùn Orílẹ̀-Èdè • Est. 2026",
       footerAboutText: "Ilé-iṣẹ́ ìròyìn olómìnira tí ó gbajúmọ̀ jùlọ ní Nàìjíríà, tí ó dúró fún ìròyìn tòótọ́, ìmúgbòòrò àwùjọ, ìwádìí jinlẹ̀, àti ìdàgbàsókè orílẹ̀-èdè kọjá àwọn ìpínlẹ̀ 36 àti Abuja.",
@@ -518,35 +522,7 @@ const TRANSLATIONS = {
       },
       'popular-4': {
         title: "Báńkì Àpapọ̀ ti Nàìjíríà (CBN) Fẹ́ Àwọn Ọ̀nà Ìsanwó Kọ̀mpútà Sí Àwọn Ọjà Ńlá",
-        excerpt: "NIBSS àti àwọn ilé-iṣẹ́ ìsanwó ti gbé àwọn ẹ̀rọ kọ̀mpútà QR kalẹ̀ ní àwọn ọjà ńlá káàkiri Nàìjíríà."
-      },
-      'editor-1': {
-        title: "Iṣẹ́ Àkànṣe 'Deep Blue' Ní Agbègbè Gulf of Guinea Mú Ààbò Wá fún Ọkọ̀ Ẹrù",
-        excerpt: "Àjọ NIMASA ti Nàìjíríà ti ṣe àṣeyọrí pé kò sí ìkọlù àwọn ọlọ́ṣà ojú-omi kankan nínú omi orílẹ̀-èdè Nàìjíríà."
-      },
-      'editor-2': {
-        title: "Owó Ìwọlé Orin Afrobeats Àti Sinimá Nollywood Lórí Ayélujára Bú Sókè ní Ìlọ́po Méjì",
-        excerpt: "Àwọn òṣèré sinimá àti olórin Nàìjíríà ń gba iwaju lórí àwọn àtẹ orin àgbáyé àti àwọn ilé sinimá àgbáyé."
-      },
-      'editor-3': {
-        title: "Àwọn Àgbẹ̀ Kòkó ní Ondo àti Cross River Gba Ìwé-Ẹ̀rí Pàtàkì Láti Firanṣẹ́ Sí Yúróòpù",
-        excerpt: "Àwọn àgbẹ̀ kòkó kéékèèké ti gbé owó tí wọ́n ń rí wọlé ga ní ìpín 60% nípasẹ̀ ṣíṣe àtúnṣe sí ìlànà ìkójáde sí Yúróòpù."
-      },
-      'worth-reading-video': {
-        title: "Orin àti Ìgbé-ayé Ìlú Èkó: Ìwádìí Jinlẹ̀ sí Ìlú Ńlá Tó Láyọ̀ Jù Lọ ní Áfíríkà"
-      },
-      'worth-reading-item-2': {
-        title: "Àwọn Ère Nok àti Benin: Bí A Ṣe Ń Tọ́jú Ọgbọ́n Ẹnì Tí Ó Wà Láti Ẹgbẹ̀rún Ọdún Sẹ́yìn"
-      }
-    }
-  },
-
-  ig: {
-    langName: "Igbo",
-    slogan: "Olu Mba • Olu Nile Dị Mkpa",
-    publishBtn: "Depụta Akụkọ",
-    signInBtn: "Banye",
-    subscribeBtn: "Debanye Aha Ugbua",
+           subscribeBtn: "Debanye Aha (N'efu)",
     openBookmarksBtn: "Akụkọ Ndị E Chekwara",
     searchPlaceholder: "Chọọ akụkọ Naịjirịa, ọchịchị, azụmahịa...",
 
@@ -554,6 +530,50 @@ const TRANSLATIONS = {
     nav: {
       home: "ISIOCHICHI",
       politics: "ỌCHỊCHỊ",
+      economy: "AZỤMAAHỊA",
+      technology: "NKÀ NA ỤZỤ",
+      culture: "NTỤRNDỤ",
+      sports: "EGWUREGWU",
+      travel: "NJEM",
+      science: "SAYENSI",
+      world: "ỤWA",
+      subscription: "N'EFU",
+      contact: "KPỌTỤRỤ ANYỊ"
+    },
+
+    // Drawer categories
+    drawer: {
+      home: "Isi Ihu Akwụkwọ",
+      politics: "Ọchịchị na Ọchịchị Obodo",
+      economy: "Azụmaahịa na Akụ na Ụba",
+      technology: "Teknụzụ na Mmepụta Ọhụrụ",
+      culture: "Nollywood na Egwú",
+      sports: "Egwuregwu na Super Eagles",
+      travel: "Njem na Omenala",
+      science: "Sayensi na Mgbanwe Ihu Igwe",
+      world: "Ụwa na ECOWAS",
+      savedStories: "Akụkọ Ndị E Chekwara",
+      account: "Akaụntụ M",
+      subscribePill: "Debanye Aha • 100% n'Efu",
+      publishDesk: "Depụta Akụkọ (Admin)"
+    },
+
+    // Badges & Section Headers
+    badges: {
+      hotNow: "Ọ KỤKỤRỤ UGBUA",
+      trendingHeader: "IHE NA-EME N'IME NAỊJIRỊA",
+      breakingHeader: "AKỤKỌ PỤRỤ ICHE DỊ OKWU",
+      nationalSpotlight: "Akụkọ Kacha Pụta Ihe n'Obodo",
+      popularHeader: "Nke Kacha Ewu Ewu na Naịjirịa",
+      editorPickHeader: "Nhọrọ Onye Nchịkọta",
+      specialFeaturesHeader: "Akụkọ Pụrụ Iche",
+      appTitle: "Budata Ngwa Nigerian Updates",
+      appSubtitle: "Mụrụ anya n'ihe na-eme n'oge niile. Nweta amụma akụkọ ozugbo, gụọ akụkọ mgbe ị na-enweghị ịntanetị, ma gee ntị na mgbasa ozi n'ime ekwentị gị.",
+      downloadIos: "Budata na App Store",
+      downloadAndroid: "Nweta ya na Google Play",
+      briefingTitle: "Nchịkọta Akụkọ Ututu",
+      briefingSubtitle: "Nweta nchịkọta akụkọ ụtụtụ nke Naịjirịa, ọnụego Naira, na nyocha ọchịchị kpọmkwem na email gị.",
+      subscribeButton: "Debanye Aha n'Efu",��CHỊ",
       economy: "AZỤMAAHỊA",
       technology: "NKÀ NA ỤZỤ",
       culture: "NTỤRNDỤ",

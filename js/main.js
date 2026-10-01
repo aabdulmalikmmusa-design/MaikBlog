@@ -21,6 +21,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Synchronize articles from MySQL database
+  if (typeof fetch === 'function') {
+    fetch('api/articles.php?limit=50')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && data.status === 'success' && Array.isArray(data.data) && typeof BLOG_ARTICLES !== 'undefined') {
+          data.data.forEach(dbArt => {
+            const idx = BLOG_ARTICLES.findIndex(a => a.id === dbArt.id);
+            if (idx >= 0) {
+              BLOG_ARTICLES[idx] = Object.assign({}, BLOG_ARTICLES[idx], dbArt);
+            } else {
+              BLOG_ARTICLES.unshift(dbArt);
+            }
+          });
+        }
+      })
+      .catch(e => console.warn('Could not sync articles from MySQL:', e));
+  }
+
   // Reader Comment tracking & storage
   let readerCommentedMap = JSON.parse(localStorage.getItem('nu_commented_articles') || '{}');
   let articleCommentsStore = JSON.parse(localStorage.getItem('nu_article_comments') || 'null');
@@ -203,77 +222,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.openArticle = function(articleId) {
-    const article = getArticleById(articleId);
-    if (!article) return;
-
-    currentOpenArticleId = articleId;
-
-    const modalImg = document.getElementById('readerImg');
-    const modalTag = document.getElementById('readerTag');
-    const modalTitle = document.getElementById('readerTitle');
-    const modalSubtitle = document.getElementById('readerSubtitle');
-    const modalAuthorImg = document.getElementById('readerAuthorImg');
-    const modalAuthorName = document.getElementById('readerAuthorName');
-    const modalAuthorRole = document.getElementById('readerAuthorRole');
-    const modalDate = document.getElementById('readerDate');
-    const modalReadTime = document.getElementById('readerReadTime');
-    const modalContent = document.getElementById('readerContent');
-    const modalLikeBtn = document.getElementById('readerLikeBtn');
-    const modalLikeCount = document.getElementById('readerLikeCount');
-    const modalBookmarkBtn = document.getElementById('readerBookmarkBtn');
-
-    if (modalImg) modalImg.src = article.image;
-    if (modalTag) modalTag.textContent = article.category;
-    if (modalTitle) modalTitle.textContent = article.title;
-    if (modalSubtitle) modalSubtitle.textContent = article.subtitle || article.excerpt;
-    if (modalAuthorImg) modalAuthorImg.src = article.author?.avatar || 'assets/images/author-1.jpg';
-    if (modalAuthorName) modalAuthorName.textContent = article.author?.name || 'Editorial Board';
-    if (modalAuthorRole) modalAuthorRole.textContent = article.author?.role || 'Staff Correspondent';
-    if (modalDate) modalDate.textContent = article.date;
-    if (modalReadTime) modalReadTime.textContent = article.readTime || '4 min read';
-    if (modalContent) modalContent.innerHTML = article.content || `<p>${article.excerpt}</p>`;
-
-    // Likes state
-    if (modalLikeCount) modalLikeCount.textContent = article.likes || 120;
-    if (modalLikeBtn) {
-      modalLikeBtn.classList.remove('active');
-      modalLikeBtn.onclick = () => {
-        article.likes = (article.likes || 120) + 1;
-        modalLikeCount.textContent = article.likes;
-        modalLikeBtn.classList.add('active');
-        showToast('You liked this article!');
-      };
-    }
-
-    // Bookmark state
-    const isBookmarked = savedBookmarks.includes(article.id);
-    if (modalBookmarkBtn) {
-      modalBookmarkBtn.classList.toggle('active', isBookmarked);
-      modalBookmarkBtn.innerHTML = isBookmarked 
-        ? `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M5 5v16l7-5 7 5V5z"/></svg> Saved`
-        : `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 5v16l7-5 7 5V5z"/></svg> Bookmark`;
-
-      modalBookmarkBtn.onclick = () => {
-        toggleBookmark(article.id);
-        const nowBookmarked = savedBookmarks.includes(article.id);
-        modalBookmarkBtn.classList.toggle('active', nowBookmarked);
-        modalBookmarkBtn.innerHTML = nowBookmarked
-          ? `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M5 5v16l7-5 7 5V5z"/></svg> Saved`
-          : `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 5v16l7-5 7 5V5z"/></svg> Bookmark`;
-      };
-    }
-
-    // Load comments
-    renderComments(articleId);
-
-    openModal(articleModal);
+    if (!articleId) return;
+    window.location.href = `article.html?id=${encodeURIComponent(articleId)}`;
   };
 
-  // Article card click delegation
+  // Article card click delegation - loads dedicated article page
   document.querySelectorAll('[data-article-id]').forEach(el => {
     el.addEventListener('click', (e) => {
       // Don't trigger if clicked on a specific action button inside
-      if (e.target.closest('.no-modal-trigger')) return;
+      if (e.target.closest('.no-modal-trigger, button, a')) return;
       const articleId = el.getAttribute('data-article-id');
       if (articleId) {
         window.openArticle(articleId);
@@ -488,6 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (searchInput && searchResults) {
+    let searchDebounceTimer = null;
     searchInput.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
       if (!q) {
@@ -495,30 +453,46 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      if (typeof BLOG_ARTICLES === 'undefined') return;
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(async () => {
+        let matches = [];
+        try {
+          const res = await fetch(`api/articles.php?search=${encodeURIComponent(q)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'success' && Array.isArray(data.data)) {
+              matches = data.data;
+            }
+          }
+        } catch (err) {
+          console.warn('MySQL search query failed, using local fallback:', err);
+        }
 
-      const matches = BLOG_ARTICLES.filter(a => 
-        a.title.toLowerCase().includes(q) ||
-        a.category.toLowerCase().includes(q) ||
-        a.excerpt.toLowerCase().includes(q) ||
-        (a.author && a.author.name.toLowerCase().includes(q))
-      );
+        if (matches.length === 0 && typeof BLOG_ARTICLES !== 'undefined') {
+          matches = BLOG_ARTICLES.filter(a => 
+            a.title.toLowerCase().includes(q) ||
+            a.category.toLowerCase().includes(q) ||
+            a.excerpt.toLowerCase().includes(q) ||
+            (a.author && a.author.name.toLowerCase().includes(q))
+          );
+        }
 
-      if (matches.length === 0) {
-        searchResults.innerHTML = `<p style="color: var(--text-muted); font-size: 0.88rem; padding: 12px 0;">No articles found matching "<strong>${q}</strong>".</p>`;
-        return;
-      }
+        if (matches.length === 0) {
+          searchResults.innerHTML = `<p style="color: var(--text-muted); font-size: 0.88rem; padding: 12px 0;">No articles found matching "<strong>${q}</strong>".</p>`;
+          return;
+        }
 
-      searchResults.innerHTML = matches.map(a => `
-        <div class="search-item" onclick="closeModal(document.getElementById('searchModal')); openArticle('${a.id}')">
-          <img src="${a.image}" class="search-item-img" alt="${a.title}">
-          <div style="display: flex; flex-direction: column;">
-            <span style="font-size: 0.68rem; font-weight: 800; color: var(--accent-blue); text-transform: uppercase;">${a.category}</span>
-            <strong style="font-size: 0.9rem; line-height: 1.35; color: var(--text-primary);">${a.title}</strong>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">${a.date} вЂў ${a.readTime}</span>
+        searchResults.innerHTML = matches.map(a => `
+          <div class="search-item" onclick="closeModal(document.getElementById('searchModal')); openArticle('${a.id}')">
+            <img src="${a.image || 'assets/images/breaking-1.jpg'}" class="search-item-img" alt="${a.title.replace(/"/g, '&quot;')}">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 0.68rem; font-weight: 800; color: var(--accent-blue); text-transform: uppercase;">${a.category}</span>
+              <strong style="font-size: 0.9rem; line-height: 1.35; color: var(--text-primary);">${a.title}</strong>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">${a.date} • ${a.readTime}</span>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `).join('');
+      }, 180);
     });
   }
 
@@ -585,6 +559,11 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Front Page',
       cardSelectors: ['#home .hero-main-story', '#home'],
       parentSection: '#home'
+    },
+    'subscription': {
+      title: 'Free Access',
+      cardSelectors: ['#subscription .free-sub-card', '#subscription'],
+      parentSection: '#subscription'
     },
     'contact': {
       title: 'Contact',
@@ -750,42 +729,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function navigateToCategory(cat) {
     if (!cat) return;
+    const catLower = cat.toLowerCase().trim();
 
-    // 1. COMPLETELY DISMISS any bottom-right toast popups so they NEVER appear on category clicks
+    // 1. COMPLETELY DISMISS any bottom-right toast popups
     if (toastContainer) {
       while (toastContainer.firstChild) {
         toastContainer.removeChild(toastContainer.firstChild);
       }
     }
 
-    // 2. Update active state in nav links
-    document.querySelectorAll('.nav-link').forEach(l => {
-      l.classList.toggle('active', l.getAttribute('data-category') === cat);
-    });
-
-    document.querySelectorAll('.classy-nav-link, .drawer-nav-card').forEach(c => {
-      c.classList.toggle('active', c.getAttribute('data-category') === cat);
-    });
-
-    if (typeof closeDrawer === 'function') {
-      closeDrawer();
-    } else if (mobileNavDrawer) {
-      mobileNavDrawer.classList.remove('open');
+    if (catLower === 'home') {
+      window.location.href = 'index.html';
+      return;
+    }
+    if (catLower === 'subscription') {
+      const sub = document.getElementById('subscription');
+      if (sub) {
+        sub.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.href = 'index.html#subscription';
+      }
+      return;
+    }
+    if (catLower === 'contact') {
+      const cont = document.getElementById('contact');
+      if (cont) {
+        cont.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.href = 'index.html#contact';
+      }
+      return;
     }
 
-    // 3. Trigger navbar blink animation
-    blinkCategorySection(cat);
+    // If currently on category.html and window.loadCategoryPage is present, update view smoothly
+    if (typeof window.loadCategoryPage === 'function') {
+      window.loadCategoryPage(catLower);
+      if (typeof closeDrawer === 'function') closeDrawer();
+      return;
+    }
 
-    // 4. Trigger on-section toggle sign & slight pop-up simulation directly on the card
-    triggerSectionToggleSimulation(cat);
+    // Otherwise, navigate to the dedicated category / niche page
+    window.location.href = `category.html?cat=${encodeURIComponent(catLower)}`;
   }
 
   // Bind category navigation to top nav, mobile drawer links, and footer category links
   document.querySelectorAll('.nav-link[data-category], .mobile-nav-links a[data-category], .footer-cat-link[data-category]').forEach(link => {
     link.addEventListener('click', (e) => {
-      e.preventDefault();
       const cat = link.getAttribute('data-category');
-      navigateToCategory(cat);
+      if (cat) {
+        e.preventDefault();
+        navigateToCategory(cat);
+      }
     });
   });
 
@@ -804,9 +798,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (subscribeForm) {
     subscribeForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = subscribeForm.querySelector('input[type="email"]').value;
+      const emailInput = subscribeForm.querySelector('input[type="email"]');
+      const email = emailInput ? emailInput.value : '';
       closeModal(subscribeModal);
-      showToast(`Thank you! Subscription confirmed for ${email}`, 'success');
+      showToast(`🎉 Free subscription activated for ${email}! No payment needed.`, 'success');
+      if (emailInput) emailInput.value = '';
+    });
+  }
+
+  const onPageFreeSubForm = document.getElementById('onPageFreeSubForm');
+  if (onPageFreeSubForm) {
+    onPageFreeSubForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = onPageFreeSubForm.querySelector('input[type="email"]');
+      if (input && input.value) {
+        showToast(`🎉 You're subscribed for free! Daily briefings will be sent to ${input.value}`, 'success');
+        input.value = '';
+      }
     });
   }
 
@@ -816,7 +824,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const input = footerNewsletterForm.querySelector('input');
       if (input && input.value) {
-        showToast(`Subscribed! Daily briefings will be sent to ${input.value}`, 'success');
+        showToast(`🎉 Free briefing subscription confirmed for ${input.value}!`, 'success');
         input.value = '';
       }
     });
@@ -1138,6 +1146,31 @@ document.addEventListener('DOMContentLoaded', () => {
         isAdminPublished: true
       };
 
+      // Persist directly to MySQL database via REST API
+      fetch('api/articles.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          subtitle: subtitle,
+          category: categoryName.toUpperCase(),
+          categorySlug: categorySlug,
+          categoryName: categoryName.toUpperCase(),
+          authorName: author,
+          authorRole: role,
+          image: image,
+          excerpt: subtitle,
+          content: paragraphs
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success' && res.articleId) {
+          newArticle.id = res.articleId;
+        }
+      })
+      .catch(err => console.warn('Could not persist new article to MySQL:', err));
+
       // Prepend to active memory array and localStorage store
       BLOG_ARTICLES.unshift(newArticle);
       customAdminArticles.unshift(newArticle);
@@ -1149,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closeModal(publishStoryModal);
       adminPublishForm.reset();
 
-      showToast(`Story published live by Admin: "${newArticle.title}"`, 'success');
+      showToast(`Story published live to MySQL database: "${newArticle.title}"`, 'success');
 
       // Scroll smoothly to the newly published story
       if (adminDispatchesSection) {
@@ -1339,6 +1372,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ==========================================
+  // 10.5 STICKY NAVBAR SCROLL ELEVATION
+  // ==========================================
+  const mainNavbar = document.querySelector('.main-navbar');
+  if (mainNavbar) {
+    const handleNavScroll = () => {
+      if (window.scrollY > 20) {
+        mainNavbar.classList.add('is-sticky');
+      } else {
+        mainNavbar.classList.remove('is-sticky');
+      }
+    };
+    window.addEventListener('scroll', handleNavScroll, { passive: true });
+    handleNavScroll();
+  }
+
   // Back to Top button
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
@@ -1379,6 +1428,19 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => toast.remove(), 300);
     }, 2800);
   }
+
+  // Category tags click delegation across cards and headers
+  document.addEventListener('click', (e) => {
+    const tagEl = e.target.closest('.badge-pill, .mini-tag, .card-tag-overlay span, .breaking-date, .cat-tag');
+    if (tagEl && !tagEl.closest('a')) {
+      const rawText = tagEl.textContent.trim().split('•')[0].trim();
+      const slug = (typeof normalizeCategorySlug === 'function') ? normalizeCategorySlug(rawText) : rawText.toLowerCase();
+      if (['sports', 'politics', 'economy', 'technology', 'culture', 'travel', 'science', 'world'].includes(slug)) {
+        e.stopPropagation();
+        navigateToCategory(slug);
+      }
+    }
+  });
 
   window.showToast = showToast;
 });
